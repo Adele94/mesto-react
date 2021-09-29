@@ -12,19 +12,30 @@ function Main(props) {
       .then((result) => {
         setItem(result);
       })
+      .catch((err) => {
+        console.log(err);
+      })
   }, []);
 
   // Инициализация профиля и начальных карточек
-  let userName = user.name;
-  let userDescription = user.about;
-  let userAvatar = user.avatar;
-
+  const [userName, setUserName] = useState('');
+  const [userDescription, setUserDescription] = useState('');
+  const [userAvatar, setUserAvatar] = useState('');
+  
+  React.useEffect(() => {
+    setUserName(user.name);
+    setUserDescription(user.about);
+    setUserAvatar(user.avatar);
+  });
   const [cards, setCards] = useState([]);
 
   React.useEffect(() => {
     api.getInitialCards()
       .then((result) => {
         setCards(result);
+      }) 
+      .catch((err) => {
+        console.log(err);
       })
   }, []);
 
