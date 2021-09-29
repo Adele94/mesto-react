@@ -5,28 +5,24 @@ import React, { useState } from 'react';
 import Card from './Card';
 
 function Main(props) {
-  const [user, setItem] = useState([]);
+
+  // Инициализация профиля и начальных карточек
+  const [userName, setUserName] = useState('');
+  const [userDescription, setUserDescription] = useState('');
+  const [userAvatar, setUserAvatar] = useState('');
 
   React.useEffect(() => {
     api.getUserProfile()
       .then((result) => {
-        setItem(result);
+        setUserName(result.name);
+        setUserDescription(result.about);
+        setUserAvatar(result.avatar);
       })
       .catch((err) => {
         console.log(err);
       })
   }, []);
 
-  // Инициализация профиля и начальных карточек
-  const [userName, setUserName] = useState('');
-  const [userDescription, setUserDescription] = useState('');
-  const [userAvatar, setUserAvatar] = useState('');
-  
-  React.useEffect(() => {
-    setUserName(user.name);
-    setUserDescription(user.about);
-    setUserAvatar(user.avatar);
-  });
   const [cards, setCards] = useState([]);
 
   React.useEffect(() => {
