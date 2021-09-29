@@ -10,6 +10,7 @@ function Main(props) {
   const [userName, setUserName] = useState('');
   const [userDescription, setUserDescription] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
+  const [cards, setCards] = useState([]);
 
   React.useEffect(() => {
     api.getUserProfile()
@@ -22,8 +23,6 @@ function Main(props) {
         console.log(err);
       })
   }, []);
-
-  const [cards, setCards] = useState([]);
 
   React.useEffect(() => {
     api.getInitialCards()
