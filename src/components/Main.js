@@ -1,44 +1,14 @@
 import plusImg from '../images/plus.svg';
 import avatarEditImg from '../images/Vector-avatar.svg';
-import api from '../utils/Api'
-import React, { useState } from 'react';
+import React from 'react';
 import Card from './Card';
-import {currentUserContext} from '../contexts/CurrentUserContext';
+import { currentUserContext } from '../contexts/CurrentUserContext';
 
 
 function Main(props) {
 
   // Подписываемся на контекст CurrentUserContext
   const currentUser = React.useContext(currentUserContext);
-
-  // Инициализация профиля и начальных карточек
-  const [cards, setCards] = useState([]);
-
-  React.useEffect(() => {
-    api.getInitialCards()
-      .then((result) => {
-        setCards(result);
-      }) 
-      .catch((err) => {
-        console.log(err);
-      })
-  }, []);
-
-  function handleCardLike(card) {
-    // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-    // Отправляем запрос в API и получаем обновлённые данные карточки
-    api.renderLikes(card._id, isLiked ? 'DELETE' : 'PUT').then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-    });
-}
-
-function handleCardDelete(card) {
- // Отправляем запрос в API на удаление карточки
- api.deleteCard(card._id).then(
-    setCards(cards.filter(item => item._id !== card._id))
- );
-}
 
   return (
     <main className="content">
@@ -57,7 +27,7 @@ function handleCardDelete(card) {
         </button>
       </section>
       <section className="elements">
-        {cards.map((item) => <Card key={item._id} cardItem={item} onCardClick={props.onCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete}/>)}
+        {props.cards.map((item) => <Card key={item._id} cardItem={item} onCardClick={props.onCardClick} onCardLike={props.onCardLike} onCardDelete={props.onCardDelete} />)}
       </section>
     </main>
   );
