@@ -9,13 +9,13 @@ import EditAvatarPopup from './EditAvatarPopup';
 import ImagePopup from './ImagePopup';
 import React from 'react';
 import api from "../utils/Api";
-import { currentUserContext } from '../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function App() {
 
-  const [isEditAvatarPopupOpen, setEditAvatarOpen] = React.useState(false);
-  const [isEditProfilePopupOpen, setEditProfileOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setAddPlaceOpen] = React.useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [selectedCard, setSelctedCard] = React.useState(null);
   const [currentUser, setCurrentUser] = React.useState({});
   // Инициализация профиля и начальных карточек
@@ -42,13 +42,13 @@ function App() {
   }, []);
 
   function handleEditAvatarClick() {
-    setEditAvatarOpen(true);
+    setIsEditAvatarPopupOpen(true);
   }
   function handleEditProfileClick() {
-    setEditProfileOpen(true);
+    setIsEditProfilePopupOpen(true);
   }
   function handleAddPlaceClick() {
-    setAddPlaceOpen(true);
+    setIsAddPlacePopupOpen(true);
   }
 
   function handleCardClick(card) {
@@ -83,14 +83,19 @@ function App() {
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api.renderLikes(card._id, isLiked ? 'DELETE' : 'PUT').then((newCard) => {
       setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    })
+    .catch((err) => {
+      console.log(err);
     });
   }
 
   function handleCardDelete(card) {
     // Отправляем запрос в API на удаление карточки
-    api.deleteCard(card._id).then(
+    api.deleteCard(card._id)
+    .then(() => {
       setCards(cards.filter(item => item._id !== card._id))
-    ).catch((err) => {
+    })
+    .catch((err) => {
       console.log(err);
     });
   }
@@ -107,14 +112,14 @@ function App() {
   }
 
   function closeAllPopups() {
-    setEditAvatarOpen(false);
-    setEditProfileOpen(false);
-    setAddPlaceOpen(false);
+    setIsEditAvatarPopupOpen(false);
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
     setSelctedCard(null);
   }
 
   return (
-    <currentUserContext.Provider value={currentUser}>
+    <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <Header />
         <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} cards={cards} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
@@ -122,10 +127,10 @@ function App() {
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
         <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
         <ImagePopup onClose={closeAllPopups} card={selectedCard} />
-        <PopupWithForm title="Вы уверены" name="delete-card" />
+        <PopupWithForm title="Вы уверены" name="delete-card" buttonText='Да'/>
         <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
       </div>
-    </currentUserContext.Provider>
+    </CurrentUserContext.Provider>
   );
 }
 

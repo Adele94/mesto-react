@@ -2,13 +2,13 @@ import plusImg from '../images/plus.svg';
 import avatarEditImg from '../images/Vector-avatar.svg';
 import React from 'react';
 import Card from './Card';
-import { currentUserContext } from '../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 
 function Main(props) {
 
   // Подписываемся на контекст CurrentUserContext
-  const currentUser = React.useContext(currentUserContext);
+  const currentUser = React.useContext(CurrentUserContext);
 
   return (
     <main className="content">
@@ -27,7 +27,13 @@ function Main(props) {
         </button>
       </section>
       <section className="elements">
-        {props.cards.map((item) => <Card key={item._id} cardItem={item} onCardClick={props.onCardClick} onCardLike={props.onCardLike} onCardDelete={props.onCardDelete} />)}
+        { props.cards.map((item) => (
+          <Card
+            key={item._id} cardItem={item} onCardClick={props.onCardClick}
+            onCardLike={props.onCardLike} onCardDelete={props.onCardDelete}
+          />
+        )
+        )}
       </section>
     </main>
   );

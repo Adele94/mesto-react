@@ -22,16 +22,18 @@ function AddPlacePopup(props) {
       name: name,
       link: link,
     });
+    setName('');
+    setLink('');
   }
 
   return (
-    <PopupWithForm title="Новое место" name="place" isOpen={props.isOpen} onClose={props.onClose} onSubmit={handleSubmit}>
+    <PopupWithForm title="Новое место" name="place" isOpen={props.isOpen} onClose={props.onClose} onSubmit={handleSubmit} buttonText='Создать'>
       <section className="popup__input-section">
-        <input type="text" className="popup__input popup__input_place_name" onChange={handleNameChange} defaultValue="" name="name" placeholder="Название" minLength="2" maxLength="30" required />
+        <input type="text" className="popup__input popup__input_place_name" onChange={handleNameChange} value={name} name="name" placeholder="Название" minLength="2" maxLength="30" required />
         <span className="popup__input-error name-input-error"></span>
       </section>
       <section className="popup__input-section">
-        <input type="url" className="popup__input popup__input_place_link" onChange={handleLinkChange} defaultValue="" name="link" placeholder="Ссылка на картинку" required />
+        <input type="url" className="popup__input popup__input_place_link" onChange={handleLinkChange} value={link} name="link" placeholder="Ссылка на картинку" required />
         <span className="popup__input-error link-input-error"></span>
       </section>
     </PopupWithForm>
